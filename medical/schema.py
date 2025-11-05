@@ -109,9 +109,9 @@ class Query(graphene.ObjectType):
         if info.context.user.is_anonymous:
             raise PermissionDenied(_("unauthorized"))
         search_str = kwargs.get("str")
+        q = Item.objects.filter(*filter_validity(date))
         if pre_auth is not None:
             q=q.filter(pre_authorization_required=pre_auth)
-        q = Item.objects.filter(*filter_validity(date))
         if pricelist_uuid is not None:
             q = q.filter(pricelist_details__items_pricelist__uuid=pricelist_uuid,
                          pricelist_details__validity_to__isnull=True)
